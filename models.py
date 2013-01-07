@@ -26,7 +26,7 @@ class Servico(models.Model):
         return self.titulo
 
     def imagem_icone(self):
-        return  mark_safe(u'<img src="%s" height="48px"/>' % self.imagem.url)
+        return  mark_safe(u'<img src="%s" style="height:48px"/>' % self.imagem.url)
     imagem_icone.short_description = 'Imagem'
     imagem_icone.allow_tags = True
 
@@ -35,9 +35,14 @@ class Cliente(models.Model):
     site = models.URLField(null=True,blank=True,help_text='Endereço do site do cliente')
     imagem = models.ImageField(upload_to='clientes')
     slug = models.SlugField(max_length=100)
+
     def __unicode__(self):
         return self.descricao
 
+    def imagem_icone(self):
+        return  mark_safe(u'<img src="%s" style="height:48px"/>' % self.imagem.url)
+    imagem_icone.short_description = 'Imagem'
+    imagem_icone.allow_tags = True
 
 class Trabalho(models.Model):
     titulo = models.CharField(max_length=40)
@@ -49,6 +54,12 @@ class Trabalho(models.Model):
     video = models.CharField(max_length=450,null=True,blank=True,help_text='Link do video (youtube) ')
     tags = TaggableManager(help_text='')
     slug = models.SlugField(max_length=160)
+
+class TextoPagina(models.Model):
+    titulo = models.CharField(max_length=100,null=True,blank=True)
+    texto = models.TextField()
+    imagem = models.ImageField(upload_to='textos/',blank=True,null=True)
+    slug = models.SlugField(max_length=120)
 
 
 

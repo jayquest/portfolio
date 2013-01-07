@@ -2,13 +2,17 @@
 # Create your views here.
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.forms import Form
 from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from portfolio.models import Trabalho,Cliente,Servico,CaracteristicaServico
+from portfolio.models import *
 
 def servicos_list(request):
     return {'lista_servicos':Servico.objects.order_by('?').all()[:5]}
+
+def clientes_list(request):
+    return {'lista_clientes':Cliente.objects.order_by('?').all()[:6]}
 
 def index(request,pagina):
     work_list = Trabalho.objects.all()
@@ -74,9 +78,13 @@ def clientes(request,pagina):
     return render_to_response('clients.html',{'clientes':lista,'current':'clientes'},context_instance=RequestContext(request))
 
 def servicos(request):
-    servicos = Servico.objects.order_by('?').all()
+    servicos = Servico.objects.all()
+    try:
+        texto_servicos = TextoPagina.objects.get(slug='texto_servico')
+    except:
+        texto_servicos = None
 
-    return render_to_response('services.html',{'servicos':servicos},context_instance=RequestContext(request))
+    return render_to_response('services.html',{'servicos':servicos,'texto_servico':texto_servicos},context_instance=RequestContext(request))
 
 def detalhes_servicos(request,servico):
     try:
@@ -85,3 +93,5 @@ def detalhes_servicos(request,servico):
         raise Http404
 
     return render_to_response('service_detail.html',{'servico':service},context_instance=RequestContext(request))
+
+
