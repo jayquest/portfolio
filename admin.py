@@ -141,7 +141,10 @@ class ServicosAdmin(CustomModelAdmin):
 
         return media
 
-
+    def get_model_perms(self, request):
+        permiss = super(ServicosAdmin, self).get_model_perms(request)
+        permiss['config'] = self.has_change_permission(request) and self.has_add_permission(request)
+        return permiss
 
 class ClientesAdmin(CustomModelAdmin):
     list_display = ('imagem_icone','descricao','site')
